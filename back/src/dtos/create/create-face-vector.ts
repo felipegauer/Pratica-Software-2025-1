@@ -10,6 +10,6 @@ export class CreateFaceVectorDto {
   @Min(0, { message: 'Index must be a non-negative integer' })
   index: number;
 
-  @IsOptional()
+  @IsNotEmpty({ message: 'Professor ID is required' })
   professorId: string;
 }
