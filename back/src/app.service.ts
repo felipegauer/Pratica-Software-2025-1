@@ -9,11 +9,26 @@ export class AppService {
 
   async create(professor:CreateProfessorDto){
     const newUser =  await this.professorRepo.create(professor);
+    if(!newUser) throw new Error('Failed to create professor');
+
     return newUser;
   }
 
   async getUser(name:string){
     const users = await this.professorRepo.getUser(name);
+    if (!users || users.length === 0) throw new Error('User not found');
+
     return users;
+  }
+
+  async addFaceVector(professorId: string, body: {faceVector:number[]}) {
+    const faceVectorDto = body.faceVector.map((value, index) => ({
+      value,
+      index,
+    }));
+    const result = await this.professorRepo.addFaceVector(professorId, faceVectorDto);
+    if(!result) throw new Error('Failed to add face vector');
+
+    return result;
   }
 }

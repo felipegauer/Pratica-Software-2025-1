@@ -1,20 +1,50 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  InternalServerErrorException,
+  NotFoundException,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateProfessorDto } from './dtos/create/create-professor';
 
-@Controller()
+@Controller('professor')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('create')
   async createUser(@Body() professor: CreateProfessorDto) {
-    const newUser = this.appService.create(professor);
-    return newUser;
+    try {
+      return await this.appService.create(professor);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
-  @Get('professor')
+  @Get()
   async getUser(@Query('name') name: string) {
-    const user = this.appService.getUser(name);
-    return user;
+    try {
+      return await this.appService.getUser(name);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  @Post('add-face-vector')
+  async addFaceVector(
+    @Query('id') professorId: string,
+    @Body() faceVector: { faceVector: number[] },
+  ) {
+    try {
+      const result = await this.appService.addFaceVector(
+        professorId,
+        faceVector,
+      );
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }
