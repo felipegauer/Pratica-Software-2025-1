@@ -37,6 +37,22 @@ export class PrismaProfessorRepository implements IProfessorRepository {
     professorId: string,
     faceVector: CreateFaceVectorDto[],
   ): Promise<any> {
+    const professor = await this.prisma.professor.findUnique({
+      where: {
+        id: professorId,
+      },
+      include: {
+        faceVector: true,
+      },
+    });
+    if (!professor) return null;
+    
+    if (professor.faceVector.length > 0) await this.prisma.faceVector.deleteMany({
+      where: {
+        professorId: professorId,
+      },
+    });
+
     return await this.prisma.professor.update({
       where: {
         id: professorId,
@@ -47,6 +63,14 @@ export class PrismaProfessorRepository implements IProfessorRepository {
             data: faceVector,
           },
         },
+      },
+    });
+  }
+
+  async findAllWithFaceVector() {
+    return this.prisma.professor.findMany({
+      include: {
+        faceVector: true,
       },
     });
   }

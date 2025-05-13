@@ -47,4 +47,15 @@ export class AppController {
       throw new InternalServerErrorException(error.message);
     }
   }
+
+  @Post('find-match')
+  async findMatchingFaceVector(
+    @Body() faceVector: { faceVector: number[] },
+  ) {
+    try {
+      return await this.appService.findMatchingFaceVector(faceVector.faceVector);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
 }
