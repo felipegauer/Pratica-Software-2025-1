@@ -39,55 +39,118 @@ export class AppService {
     const professors = await this.professorRepo.findAllWithFaceVector();
     if (!professors || professors.length === 0)
       throw new Error('No professors found');
-
-    if (faceVector.length === 0 || faceVector.length !== 128)
+  
+    if (faceVector.length !== 128)
       throw new Error('Invalid face vector length');
-
-    const bestMatch: {
-      professor: {
-        id: string;
-        name: string;
-        faceVector: { value: string; index: number }[];
-      } | null;
-      similarity: number;
+  
+    let bestMatch: {
+      professor: typeof professors[0] | null;
+      distance: number;
     } = {
       professor: null,
-      similarity: 0,
+      distance: Infinity,
     };
-
-    professors.filter((p) => {
-      const sortedProfessor = p.faceVector
+  
+    for (const professor of professors) {
+      if (!professor.faceVector || professor.faceVector.length === 0) continue;
+  
+      const sortedVector = professor.faceVector
         .sort((a, b) => a.index - b.index)
         .map((fv) => parseFloat(fv.value));
-
-      const totalError = sortedProfessor.reduce((acc, val, i) => {
-        const error = Math.abs(val - faceVector[i]);
-        return acc + error;
-      }, 0);
-
-      console.log(totalError);
-
-      const averageError = totalError / faceVector.length;
-      const similarity = 1 - averageError;
-
-      console.log(`Similarity: ${similarity} for ${p.name}`);
-
-      if (similarity > bestMatch.similarity) {
-        bestMatch.similarity = similarity;
-        bestMatch.professor = p;
+  
+      if (sortedVector.length !== 128) continue;
+  
+      const distance = Math.sqrt(
+        faceVector.reduce((acc, val, i) => {
+          const diff = val - sortedVector[i];
+          return acc + diff * diff;
+        }, 0)
+      );
+  
+      console.log(`Distance for ${professor.name}: ${distance}`);
+  
+      if (distance < bestMatch.distance) {
+        bestMatch = {
+          professor,
+          distance,
+        };
       }
-
-      return similarity >= 0.75;
-    });
-
-    if (!bestMatch.professor) {
+    }
+  
+    const threshold = 0.75; // limite
+  
+    if (!bestMatch.professor || bestMatch.distance > threshold) {
       throw new Error('No matching professor found');
     }
-
+  
     return {
       id: bestMatch.professor.id,
       name: bestMatch.professor.name,
-      similarity: bestMatch.similarity,
+      distance: bestMatch.distance,
     };
   }
+
+
+
+
+  // async findMatchingFaceVector(faceVector: number[]) {
+  //   const professors = await this.professorRepo.findAllWithFaceVector();
+  //   if (!professors || professors.length === 0)
+  //     throw new Error('No professors found');
+
+  //   if (faceVector.length === 0 || faceVector.length !== 128)
+  //     throw new Error('Invalid face vector length');
+
+  //   const bestMatch: {
+  //     professor: {
+  //       id: string;
+  //       name: string;
+  //       faceVector: { value: string; index: number }[];
+  //     } | null;
+  //     similarity: number;
+  //   } = {
+  //     professor: null,
+  //     similarity: 0,
+  //   };
+
+  //   professors.filter((p) => {
+  //     if (!p.faceVector || p.faceVector.length === 0) return false;
+
+  //     const sortedProfessor = p.faceVector
+  //       .sort((a, b) => a.index - b.index)
+  //       .map((fv) => parseFloat(fv.value));
+
+  //     const totalError = sortedProfessor.reduce((acc, val, i) => {
+  //       const error = Math.abs(val - faceVector[i]);
+  //       return acc + error;
+  //     }, 0);
+
+  //     console.log(totalError);
+
+  //     const averageError = totalError / faceVector.length;
+  //     const similarity = 1 - averageError;
+
+  //     console.log(`Similarity: ${similarity} for ${p.name}`);
+
+      
+  //     if(similarity>=0.75){
+  //       if (similarity > bestMatch.similarity) {
+  //         bestMatch.similarity = similarity;
+  //         bestMatch.professor = p;
+  //       }
+  //       return true;
+  //     }
+  //     return false;
+  //   });
+
+  //   if (!bestMatch.professor) {
+  //     throw new Error('No matching professor found');
+  //   }
+
+  //   return {
+  //     id: bestMatch.professor.id,
+  //     name: bestMatch.professor.name,
+  //     similarity: bestMatch.similarity,
+  //   };
+  // }
 }
