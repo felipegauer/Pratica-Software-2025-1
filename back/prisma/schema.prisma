@@ -21,4 +21,6 @@ model FaceVector {
   index       Int
   professorId String
   professor   Professor @relation(fields: [professorId], references: [id])
+
+  @@unique([professorId, index])
 }
