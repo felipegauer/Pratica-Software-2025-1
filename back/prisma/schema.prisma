@@ -42,3 +42,4 @@ model Resources {
   
   professor   Professor?  @relation(fields: [professorId], references: [id])
 }
+// salve
