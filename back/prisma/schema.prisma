@@ -7,12 +7,19 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./erd.png"
+}
+
 model Professor {
   id         String       @id @default(uuid())
   name       String
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
+
   faceVector FaceVector[]
+  Resources Resources[]
 }
 
 model FaceVector {
@@ -23,4 +30,15 @@ model FaceVector {
   professor   Professor @relation(fields: [professorId], references: [id])
 
   @@unique([professorId, index])
+}
+
+model Resources {
+  id         String       @id @default(uuid())
+  name       String
+  professorId String?
+
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  
+  professor   Professor?  @relation(fields: [professorId], references: [id])
 }
