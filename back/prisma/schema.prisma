@@ -13,13 +13,13 @@ generator erd {
 }
 
 model Professor {
-  id         String       @id @default(uuid())
-  name       String
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   faceVector FaceVector[]
-  Resources Resources[]
+  Resources  Resources[]
 }
 
 model FaceVector {
@@ -33,13 +33,21 @@ model FaceVector {
 }
 
 model Resources {
-  id         String       @id @default(uuid())
-  name       String
+  id          String  @id @default(uuid())
+  name        String
   professorId String?
 
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  
-  professor   Professor?  @relation(fields: [professorId], references: [id])
+  inUse  Boolean  @default(false)
+  period DateTime @default(now())
+
+  professor Professor? @relation(fields: [professorId], references: [id])
+  Sala Sala[]
 }
-// salve
+
+model Sala {
+  id        String   @id @default(uuid())
+  number    String
+  resourceId String?
+  inUse     Boolean  @default(false)
+  resources Resources? @relation(fields: [resourceId], references: [id])
+}
