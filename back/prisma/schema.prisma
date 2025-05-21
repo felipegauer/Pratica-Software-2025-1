@@ -35,19 +35,33 @@ model FaceVector {
 model Resources {
   id          String  @id @default(uuid())
   name        String
-  professorId String?
-
   inUse  Boolean  @default(false)
   period DateTime @default(now())
+  professorId String?
+  periodoLetivo PeriodoLetivo
 
   professor Professor? @relation(fields: [professorId], references: [id])
   Sala Sala[]
+  @@unique([professorId, period])
 }
 
 model Sala {
   id        String   @id @default(uuid())
   number    String
-  resourceId String?
   inUse     Boolean  @default(false)
+  resourceId String?
+
   resources Resources? @relation(fields: [resourceId], references: [id])
+  @@unique([resourceId, number])
+}
+
+enum PeriodoLetivo {
+  AB  // 08:00–09:30
+  CD  // 09:45–11:15
+  EE1 // 11:30–13:00
+  FG  // 14:00–15:30
+  HI  // 15:45–17:15
+  JK  // 17:30–19:00
+  LM  // 19:15–20:45
+  NP  // 21:00–22:30
 }
