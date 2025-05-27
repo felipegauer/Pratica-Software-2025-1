@@ -14,12 +14,72 @@ generator erd {
 
 model Professor {
   id        String   @id @default(uuid())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  nome      String
+  matricula String   @unique
 
+  turmas     Turma[]
   faceVector FaceVector[]
-  Resources  Resources[]
+  Recursos  ReservaRecurso[]
+}
+
+model Curso {
+  id         Int         @id @default(autoincrement())
+  nome       String
+  codCurso   String      @unique
+  disciplinas Disciplina[]
+}
+
+model Disciplina {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  codCred   String   @unique
+  cursoId   Int
+  curso     Curso    @relation(fields: [cursoId], references: [id])
+  turmas    Turma[]
+}
+
+model Turma {
+  id           Int         @id @default(autoincrement())
+  numero       Int         @unique
+  horario      String    # horário fixo da turma
+  dataInicial  DateTime  # Primeiro dia de aula
+  dataFinal    DateTime  # Último dia de aula
+  professorId  String
+  disciplinaId Int
+
+  professor   Professor   @relation(fields: [professorId], references: [id])
+  disciplina  Disciplina  @relation(fields: [disciplinaId], references: [id])
+  reservas    ReservaRecurso[]
+}
+
+model Recurso {
+  id          String  @id @default(uuid())
+  descricao   String
+  reservado   Boolean  @default(false)
+  Sala      Sala?
+  reservas  ReservaRecurso[]
+}
+
+model Sala {
+  id         String   @id
+  numeroSala String
+  estado     Boolean  @default(false)
+  recurso    Recurso @relation(fields: [id], references: [id])
+}
+
+model ReservaRecurso {
+  id           String         @id @default(uuid())
+  professorId  String
+  turmaId      Int
+  recursoId    String
+  periodo      PeriodoLetivo
+  data         DateTime
+
+  professor    Professor       @relation(fields: [professorId], references: [id])
+  turma        Turma           @relation(fields: [turmaId], references: [id])
+  recurso      Recurso         @relation(fields: [recursoId], references: [id])
+
+  @@unique([professorId, turmaId, recursoId, data, periodo])
 }
 
 model FaceVector {
@@ -30,29 +90,6 @@ model FaceVector {
   professor   Professor @relation(fields: [professorId], references: [id])
 
   @@unique([professorId, index])
-}
-
-model Resources {
-  id          String  @id @default(uuid())
-  name        String
-  inUse  Boolean  @default(false)
-  period DateTime @default(now())
-  professorId String?
-  periodoLetivo PeriodoLetivo
-
-  professor Professor? @relation(fields: [professorId], references: [id])
-  Sala Sala[]
-  @@unique([professorId, period])
-}
-
-model Sala {
-  id        String   @id @default(uuid())
-  number    String
-  inUse     Boolean  @default(false)
-  resourceId String?
-
-  resources Resources? @relation(fields: [resourceId], references: [id])
-  @@unique([resourceId, number])
 }
 
 enum PeriodoLetivo {
