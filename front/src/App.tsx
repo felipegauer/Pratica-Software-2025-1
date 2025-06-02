@@ -5,11 +5,14 @@ import LogoNotebooks from "./assets/LogoNotebooks.png";
 import LogoKitsHDMI from "./assets/LogoKitsHDMI.png";
 import LogoKitsVGA from "./assets/LogoKitsVGA.png";
 import Logo from "./assets/Logo.png";
+import Navbar from "./components/navBar/Navbar";
 
 function App() {
   return (
-    <>
-      <div className="flex flex-col gap-8 items-center justify-start h-screen ">
+    <div className="lg:container mx-auto p-4">
+      <Navbar />
+
+      <div className="flex flex-col gap-8 items-start justify-start ">
         {/* Salas */}
         <div className="flex gap-16">
           <Item
@@ -18,7 +21,7 @@ function App() {
             logo={LogoSalas}
           />
 
-          <div className="flex justify-center gap-4 self-center">
+          <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
             <Resource
               resourceName="207"
               professor="Mangan"
@@ -39,6 +42,31 @@ function App() {
               time="10:19"
             />
             <Resource resourceName="210" professor="" colorBg="bg-[#9AF3BC]" />
+            <Resource
+              resourceName="209"
+              professor="Wesley"
+              colorBg="bg-[#C00F0C]"
+              date="10/10"
+              time="10:19"
+            />
+            <Resource resourceName="210" professor="" colorBg="bg-[#9AF3BC]" />
+            <Resource
+              resourceName="209"
+              professor="Wesley"
+              colorBg="bg-[#C00F0C]"
+              date="10/10"
+              time="10:19"
+            />
+            <Resource resourceName="210" professor="" colorBg="bg-[#9AF3BC]" />
+            <Resource
+              resourceName="209"
+              professor="Wesley"
+              colorBg="bg-[#C00F0C]"
+              date="10/10"
+              time="10:19"
+            />
+            <Resource resourceName="210" professor="" colorBg="bg-[#9AF3BC]" />
+            
           </div>
         </div>
 
@@ -50,7 +78,7 @@ function App() {
             logo={LogoNotebooks}
           />
 
-          <div className=" flex justify-center gap-4 self-center">
+          <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
             <Resource
               resourceName="207"
               professor="Mangan"
@@ -71,6 +99,18 @@ function App() {
               time="10:19"
             />
             <Resource resourceName="210" professor="" colorBg="bg-[#59A5F8]" />
+            <Resource
+              resourceName="211"
+              professor="Mangan"
+              colorBg="bg-[#59A5F8]"
+            />
+            <Resource
+              resourceName="212"
+              professor="Mangan"
+              colorBg="bg-[#C00F0C]"
+              date="10/10"
+              time="10:19"
+            />
           </div>
         </div>
 
@@ -82,7 +122,7 @@ function App() {
             logo={LogoKitsHDMI}
           />
 
-          <div className="flex justify-center gap-4 self-center">
+          <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
             <Resource
               resourceName="207"
               professor="Mangan"
@@ -114,7 +154,7 @@ function App() {
             logo={LogoKitsVGA}
           />
 
-          <div className="flex justify-center gap-4 self-center">
+          <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
             <Resource
               resourceName="207"
               professor="Mangan"
@@ -140,9 +180,13 @@ function App() {
 
         {/* Kits VGA */}
         <div className="flex gap-16">
-          <Item resourceName="Sala de Aula" colorBg="bg-[#F46F95]" logo={Logo} />
+          <Item
+            resourceName="Sala de Aula"
+            colorBg="bg-[#F46F95]"
+            logo={Logo}
+          />
 
-          <div className="flex justify-center gap-4 self-center">
+          <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
             <Resource
               resourceName="207"
               professor="Mangan"
@@ -166,7 +210,7 @@ function App() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
