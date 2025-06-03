@@ -11,6 +11,7 @@ import {
 import FaceID from "../../assets/Face ID.svg";
 import { useState } from "react";
 import Webcam from "react-webcam";
+import { FaceDetection } from "../OpenCV/FaceDetector";
 
 export default function Modal({
   open,
@@ -56,7 +57,7 @@ export default function Modal({
                 </div>
               </div>
             ) : (
-              <Webcam mirrored={true} />
+              <FaceDetection/>
             )}
 
             <div className="px-6 py-3 flex flex-row gap-2 justify-center">
