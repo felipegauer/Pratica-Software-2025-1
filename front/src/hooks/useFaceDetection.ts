@@ -14,7 +14,7 @@ export function useFaceDetection({
   fetchAsset,
   getAssetPath,
 }: UseFaceDetectionProps) {
-  const FaceDetectorInstance = useRef<FaceDetector>();
+  const FaceDetectorInstance = useRef<FaceDetector | null>(null);
 
   const [initializing, setInitializing] = useState(false);
   const [initialized, setInitialized] = useState(false);

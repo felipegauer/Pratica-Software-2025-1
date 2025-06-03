@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import * as faceapi from "face-api.js";
 import { getAssetPath } from "../../core/assets";
 import {
   CameraFacing,
@@ -27,9 +28,15 @@ export function FaceDetection() {
   const [showManualCapture, setShowManualCapture] = useState<boolean>(false);
   const [firstFaceDetection, setFirstFaceDetection] = useState<boolean>(false);
   const [status, setStatus] = useState(CaptureStatus.Idle);
+  const [toDetect, setToDetect] = useState<ImageData>();
+  const [faceVector, setFaceVector] = useState<Array<Float32Array>>([]);
 
-  const videoRef = useRef<HTMLVideoElement>(null) as React.RefObject<HTMLVideoElement>;
-  const debugOverlayRef = useRef<HTMLCanvasElement>(null) as React.RefObject<HTMLCanvasElement>;
+  const videoRef = useRef<HTMLVideoElement>(
+    null
+  ) as React.RefObject<HTMLVideoElement>;
+  const debugOverlayRef = useRef<HTMLCanvasElement>(
+    null
+  ) as React.RefObject<HTMLCanvasElement>;
   const outputCanvasRef = useRef<HTMLCanvasElement>(null);
   const loopDestroyerRef = useRef<boolean>(false);
 
@@ -59,6 +66,7 @@ export function FaceDetection() {
 
         const ctx = canvas.getContext("2d");
         if (ctx) {
+          setToDetect(data);
           ctx.putImageData(data, 0, 0);
         }
 
@@ -110,10 +118,30 @@ export function FaceDetection() {
       const ctx = debugOverlayRef.current?.getContext("2d");
 
       const faces = detectFaces(data, ctx);
-      return validateFaces(faces);
+      const validationResult = validateFaces(faces);
+      console.log("Face detection result:", validationResult);
+
+      return validationResult;
     },
     [detectFaces, validateFaces]
   );
+
+  useEffect(() => {
+    const loadModels = async () => {
+      console.log("Loading Face API models...");
+      try {
+        const MODEL_URL = "/models";
+        await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+        await faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL);
+        await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL); // ou TinyFaceDetector se preferir
+        console.log("Face API models loaded successfully");
+      } catch (error) {
+        console.log("Error loading Face API models:", error);
+        
+      }
+    };
+    loadModels();
+  }, []);
 
   // initialize face detector
   useEffect(() => {
@@ -259,6 +287,42 @@ export function FaceDetection() {
     return () => clearTimeout(timeout);
   }, [firstFaceDetection]);
 
+  useEffect(() => {
+  const runFaceApiDetection = async () => {
+    if (!selfieCaptured || !toDetect) return;
+
+    console.log("Selfie captured, extracting 128d face descriptor...");
+
+    const canvas = document.createElement("canvas");
+    canvas.width = toDetect.width;
+    canvas.height = toDetect.height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.putImageData(toDetect, 0, 0);
+
+    const detection = await faceapi
+      .detectSingleFace(canvas)
+      .withFaceLandmarks(true)
+      .withFaceDescriptor();
+
+    if (!detection) {
+      console.warn("No face detected.");
+      return;
+    }
+
+    const descriptor = detection.descriptor; // Float32Array(128)
+    console.log("128d face descriptor:", descriptor);
+    setFaceVector([descriptor])
+
+  };
+
+  runFaceApiDetection();
+}, [selfieCaptured, toDetect]);
+
+  
+
+
   return (
     <div className="flex flex-col items-center justify-center gap-2">
       <div className="video-box">
@@ -274,7 +338,12 @@ export function FaceDetection() {
 
       {showConfirmation && (
         <div>
-          <button className="bg-red-500 text-lg px-4 py-1 rounded-sm cursor-pointer" onClick={handleReset}>Retake</button>
+          <button
+            className="bg-red-500 text-lg px-4 py-1 rounded-sm cursor-pointer"
+            onClick={handleReset}
+          >
+            Retake
+          </button>
         </div>
       )}
     </div>

@@ -6,8 +6,6 @@ import LogoKitsHDMI from "./assets/LogoKitsHDMI.png";
 import LogoKitsVGA from "./assets/LogoKitsVGA.png";
 import Logo from "./assets/Logo.png";
 import Navbar from "./components/navBar/Navbar";
-import { FaceDetection } from "./components/OpenCV/FaceDetector";
-import { useEffect, useState } from "react";
 
 function App() {
   return (
