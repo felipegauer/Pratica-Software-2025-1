@@ -26,7 +26,7 @@ export class PrismaProfessorRepository implements IProfessorRepository {
   async getUser(name: string): Promise<any> {
     return await this.prisma.professor.findMany({
       where: {
-        name: {
+        nome: {
           contains: name,
         },
       },
@@ -46,12 +46,13 @@ export class PrismaProfessorRepository implements IProfessorRepository {
       },
     });
     if (!professor) return null;
-    
-    if (professor.faceVector.length > 0) await this.prisma.faceVector.deleteMany({
-      where: {
-        professorId: professorId,
-      },
-    });
+
+    if (professor.faceVector.length > 0)
+      await this.prisma.faceVector.deleteMany({
+        where: {
+          professorId: professorId,
+        },
+      });
 
     return await this.prisma.professor.update({
       where: {

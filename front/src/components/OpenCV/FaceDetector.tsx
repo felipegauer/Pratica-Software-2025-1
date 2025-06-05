@@ -20,6 +20,7 @@ import { FaceDetectionStatus } from "../../core/opencv/detector/types";
 import { useCamera } from "../../hooks/useCamera";
 import { useFaceDetection } from "../../hooks/useFaceDetection";
 import { OutputCanvas, OutputVideo } from "../Output";
+import axios from "axios";
 
 // import "./styles.css";
 
@@ -29,7 +30,10 @@ export function FaceDetection() {
   const [firstFaceDetection, setFirstFaceDetection] = useState<boolean>(false);
   const [status, setStatus] = useState(CaptureStatus.Idle);
   const [toDetect, setToDetect] = useState<ImageData>();
-  const [faceVector, setFaceVector] = useState<Array<Float32Array>>([]);
+  const [faceVector, setFaceVector] = useState<Float32Array>();
+
+  type Professor = { nome: string; [key: string]: any };
+  const [professor, setProfessor] = useState<Professor | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(
     null
@@ -93,6 +97,8 @@ export function FaceDetection() {
   }, [captureSelfie, getScreenshot, proceedToConfirmation]);
 
   const handleReset = useCallback(() => {
+    setProfessor(null);
+    setFaceVector(undefined);
     loopDestroyerRef.current = false;
 
     setSelfieCaptured(false);
@@ -137,7 +143,6 @@ export function FaceDetection() {
         console.log("Face API models loaded successfully");
       } catch (error) {
         console.log("Error loading Face API models:", error);
-        
       }
     };
     loadModels();
@@ -288,43 +293,56 @@ export function FaceDetection() {
   }, [firstFaceDetection]);
 
   useEffect(() => {
-  const runFaceApiDetection = async () => {
-    if (!selfieCaptured || !toDetect) return;
+    const runFaceApiDetection = async () => {
+      if (!selfieCaptured || !toDetect) return;
 
-    console.log("Selfie captured, extracting 128d face descriptor...");
+      const canvas = document.createElement("canvas");
+      canvas.width = toDetect.width;
+      canvas.height = toDetect.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
 
-    const canvas = document.createElement("canvas");
-    canvas.width = toDetect.width;
-    canvas.height = toDetect.height;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+      ctx.putImageData(toDetect, 0, 0);
 
-    ctx.putImageData(toDetect, 0, 0);
+      const detection = await faceapi
+        .detectSingleFace(canvas)
+        .withFaceLandmarks(true)
+        .withFaceDescriptor();
 
-    const detection = await faceapi
-      .detectSingleFace(canvas)
-      .withFaceLandmarks(true)
-      .withFaceDescriptor();
+      if (!detection) {
+        console.warn("No face detected.");
+        return;
+      }
 
-    if (!detection) {
-      console.warn("No face detected.");
-      return;
-    }
+      const descriptor = detection.descriptor; // Float32Array(128)
+      setFaceVector(descriptor);
+    };
 
-    const descriptor = detection.descriptor; // Float32Array(128)
-    console.log("128d face descriptor:", descriptor);
-    setFaceVector([descriptor])
+    runFaceApiDetection();
+  }, [selfieCaptured, toDetect]);
 
-  };
-
-  runFaceApiDetection();
-}, [selfieCaptured, toDetect]);
-
-  
-
+  useEffect(() => {
+    if (!faceVector) return;
+    axios
+      .post("/api/professor/find-match", {
+        faceVector: Array.from(faceVector || []), // Convert Float32Array to regular array
+      })
+      .then((response) => {
+        setProfessor(response.data);
+      })
+      .catch((error) => {
+        console.error("Error finding face match:", error);
+      });
+  }, [faceVector]);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2">
+    <div className="flex flex-col items-center relative justify-center gap-2">
+      {professor && (
+        <div className="text-2xl absolute top-2 z-10 bg-white rounded px-2 py-1 font-bold text-black">
+          <h1>{professor.name}</h1>
+        </div>
+      )}
+
       <div className="video-box">
         <OutputVideo videoRef={videoRef} debugOverlayRef={debugOverlayRef} />
         <OutputCanvas ref={outputCanvasRef} hidden={!showConfirmation} />

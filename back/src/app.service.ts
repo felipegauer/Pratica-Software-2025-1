@@ -39,36 +39,36 @@ export class AppService {
     const professors = await this.professorRepo.findAllWithFaceVector();
     if (!professors || professors.length === 0)
       throw new Error('No professors found');
-  
+
     if (faceVector.length !== 128)
       throw new Error('Invalid face vector length');
-  
+
     let bestMatch: {
-      professor: typeof professors[0] | null;
+      professor: (typeof professors)[0] | null;
       distance: number;
     } = {
       professor: null,
       distance: Infinity,
     };
-  
+
     for (const professor of professors) {
       if (!professor.faceVector || professor.faceVector.length === 0) continue;
-  
+
       const sortedVector = professor.faceVector
         .sort((a, b) => a.index - b.index)
         .map((fv) => parseFloat(fv.value));
-  
+
       if (sortedVector.length !== 128) continue;
-  
+
       const distance = Math.sqrt(
         faceVector.reduce((acc, val, i) => {
           const diff = val - sortedVector[i];
           return acc + diff * diff;
-        }, 0)
+        }, 0),
       );
-  
-      console.log(`Distance for ${professor.name}: ${distance}`);
-  
+
+      console.log(`Distance for ${professor.nome}: ${distance}`);
+
       if (distance < bestMatch.distance) {
         bestMatch = {
           professor,
@@ -76,22 +76,19 @@ export class AppService {
         };
       }
     }
-  
-    const threshold = 0.75; // limite
-  
+
+    const threshold = 0.45; // limite
+
     if (!bestMatch.professor || bestMatch.distance > threshold) {
       throw new Error('No matching professor found');
     }
-  
+
     return {
       id: bestMatch.professor.id,
-      name: bestMatch.professor.name,
+      name: bestMatch.professor.nome,
       distance: bestMatch.distance,
     };
   }
-
-
-
 
   // async findMatchingFaceVector(faceVector: number[]) {
   //   const professors = await this.professorRepo.findAllWithFaceVector();
@@ -132,7 +129,6 @@ export class AppService {
 
   //     console.log(`Similarity: ${similarity} for ${p.name}`);
 
-      
   //     if(similarity>=0.75){
   //       if (similarity > bestMatch.similarity) {
   //         bestMatch.similarity = similarity;
