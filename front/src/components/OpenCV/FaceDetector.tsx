@@ -31,6 +31,7 @@ export function FaceDetection() {
   const [status, setStatus] = useState(CaptureStatus.Idle);
   const [toDetect, setToDetect] = useState<ImageData>();
   const [faceVector, setFaceVector] = useState<Float32Array>();
+  const [error, setError] = useState<string | null>(null);
 
   type Professor = { nome: string; [key: string]: any };
   const [professor, setProfessor] = useState<Professor | null>(null);
@@ -126,7 +127,7 @@ export function FaceDetection() {
       const faces = detectFaces(data, ctx);
       const validationResult = validateFaces(faces);
       console.log("Face detection result:", validationResult);
-
+      setError(validationResult);
       return validationResult;
     },
     [detectFaces, validateFaces]
@@ -332,15 +333,23 @@ export function FaceDetection() {
       })
       .catch((error) => {
         console.error("Error finding face match:", error);
+        setError("Not Found");
+        handleReset();
       });
   }, [faceVector]);
 
   return (
     <div className="flex flex-col items-center relative justify-center gap-2">
-      {professor && (
-        <div className="text-2xl absolute top-2 z-10 bg-white rounded px-2 py-1 font-bold text-black">
+      {professor ? (
+        <div className="text-2xl absolute top-2 z-10 bg-green-500 rounded px-2 py-1 font-bold text-white">
           <h1>{professor.name}</h1>
         </div>
+      ) : (
+        error && (
+          <div className="text-2xl absolute top-2 z-10 bg-white rounded px-2 py-1 font-bold text-black">
+            <h1>{error}</h1>
+          </div>
+        )
       )}
 
       <div className="video-box">

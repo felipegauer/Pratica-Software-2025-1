@@ -9,209 +9,241 @@ import Navbar from "./components/navBar/Navbar";
 
 function App() {
   return (
-    <div className="lg:container mx-auto p-4">
-      <Navbar />
+    <div className="dark:bg-black">
+      <div className="lg:container mx-auto p-4">
+        <Navbar />
 
-      <div className="flex flex-col gap-8 items-start justify-start ">
-        {/* Salas */}
-        <div className="flex gap-16">
-          <Item
-            resourceName="Laboratório"
-            colorBg="bg-[#9AF3BC]"
-            logo={LogoSalas}
-          />
-
-          <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
-            <Resource
-              resourceName="207"
-              professor="Mangan"
+        <div className="flex flex-col gap-8 items-center justify-start ">
+          {/* Salas */}
+          <div className="flex gap-16">
+            <Item
+              resourceName="Laboratório"
               colorBg="bg-[#9AF3BC]"
+              logo={LogoSalas}
             />
-            <Resource
-              resourceName="208"
-              professor="Mangan"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
-            <Resource
-              resourceName="209"
-              professor="Wesley"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
-            <Resource resourceName="210" professor="" colorBg="bg-[#9AF3BC]" />
-            <Resource
-              resourceName="209"
-              professor="Wesley"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
-            <Resource resourceName="210" professor="" colorBg="bg-[#9AF3BC]" />
-            <Resource
-              resourceName="209"
-              professor="Wesley"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
-            <Resource resourceName="210" professor="" colorBg="bg-[#9AF3BC]" />
-            <Resource
-              resourceName="209"
-              professor="Wesley"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
-            <Resource resourceName="210" professor="" colorBg="bg-[#9AF3BC]" />
 
+            <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
+              <Resource
+                resourceName="207"
+                professor="Mangan"
+                colorBg="bg-[#9AF3BC]"
+              />
+              <Resource
+                resourceName="208"
+                professor="Mangan"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+              <Resource
+                resourceName="209"
+                professor="Wesley"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+              <Resource
+                resourceName="210"
+                professor=""
+                colorBg="bg-[#9AF3BC]"
+              />
+              <Resource
+                resourceName="209"
+                professor="Wesley"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+              <Resource
+                resourceName="210"
+                professor=""
+                colorBg="bg-[#9AF3BC]"
+              />
+              <Resource
+                resourceName="209"
+                professor="Wesley"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+              <Resource
+                resourceName="210"
+                professor=""
+                colorBg="bg-[#9AF3BC]"
+              />
+              <Resource
+                resourceName="209"
+                professor="Wesley"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+              <Resource
+                resourceName="210"
+                professor=""
+                colorBg="bg-[#9AF3BC]"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Notebooks */}
-        <div className="flex gap-16">
-          <Item
-            resourceName="Notebooks"
-            colorBg="bg-[#59A5F8]"
-            logo={LogoNotebooks}
-          />
+          {/* Notebooks */}
+          <div className="flex gap-16">
+            <Item
+              resourceName="Notebooks"
+              colorBg="bg-[#59A5F8]"
+              logo={LogoNotebooks}
+            />
 
-          <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
-            <Resource
-              resourceName="207"
-              professor="Mangan"
-              colorBg="bg-[#59A5F8]"
-            />
-            <Resource
-              resourceName="208"
-              professor="Mangan"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
-            <Resource
-              resourceName="209"
-              professor="Wesley"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
-            <Resource resourceName="210" professor="" colorBg="bg-[#59A5F8]" />
-            <Resource
-              resourceName="211"
-              professor="Mangan"
-              colorBg="bg-[#59A5F8]"
-            />
-            <Resource
-              resourceName="212"
-              professor="Mangan"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
+            <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
+              <Resource
+                resourceName="207"
+                professor="Mangan"
+                colorBg="bg-[#59A5F8]"
+              />
+              <Resource
+                resourceName="208"
+                professor="Mangan"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+              <Resource
+                resourceName="209"
+                professor="Wesley"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+              <Resource
+                resourceName="210"
+                professor=""
+                colorBg="bg-[#59A5F8]"
+              />
+              <Resource
+                resourceName="211"
+                professor="Mangan"
+                colorBg="bg-[#59A5F8]"
+              />
+              <Resource
+                resourceName="212"
+                professor="Mangan"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Kits HDMI */}
-        <div className="flex gap-16">
-          <Item
-            resourceName="Kits HDMI"
-            colorBg="bg-[#E9F26E]"
-            logo={LogoKitsHDMI}
-          />
-
-          <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
-            <Resource
-              resourceName="207"
-              professor="Mangan"
+          {/* Kits HDMI */}
+          <div className="flex gap-16">
+            <Item
+              resourceName="Kits HDMI"
               colorBg="bg-[#E9F26E]"
+              logo={LogoKitsHDMI}
             />
-            <Resource
-              resourceName="208"
-              professor="Mangan"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
-            <Resource
-              resourceName="209"
-              professor="Wesley"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
-            <Resource resourceName="210" professor="" colorBg="bg-[#E9F26E]" />
+
+            <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
+              <Resource
+                resourceName="207"
+                professor="Mangan"
+                colorBg="bg-[#E9F26E]"
+              />
+              <Resource
+                resourceName="208"
+                professor="Mangan"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+              <Resource
+                resourceName="209"
+                professor="Wesley"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+              <Resource
+                resourceName="210"
+                professor=""
+                colorBg="bg-[#E9F26E]"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Kits VGA */}
-        <div className="flex gap-16">
-          <Item
-            resourceName="Kits VGA"
-            colorBg="bg-[#F4C16F]"
-            logo={LogoKitsVGA}
-          />
-
-          <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
-            <Resource
-              resourceName="207"
-              professor="Mangan"
+          {/* Kits VGA */}
+          <div className="flex gap-16">
+            <Item
+              resourceName="Kits VGA"
               colorBg="bg-[#F4C16F]"
+              logo={LogoKitsVGA}
             />
-            <Resource
-              resourceName="208"
-              professor="Mangan"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
-            <Resource
-              resourceName="209"
-              professor="Wesley"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
-            <Resource resourceName="210" professor="" colorBg="bg-[#F4C16F]" />
+
+            <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
+              <Resource
+                resourceName="207"
+                professor="Mangan"
+                colorBg="bg-[#F4C16F]"
+              />
+              <Resource
+                resourceName="208"
+                professor="Mangan"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+              <Resource
+                resourceName="209"
+                professor="Wesley"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+              <Resource
+                resourceName="210"
+                professor=""
+                colorBg="bg-[#F4C16F]"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Kits VGA */}
-        <div className="flex gap-16">
-          <Item
-            resourceName="Sala de Aula"
-            colorBg="bg-[#F46F95]"
-            logo={Logo}
-          />
-
-          <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
-            <Resource
-              resourceName="207"
-              professor="Mangan"
+          {/* Kits VGA */}
+          <div className="flex gap-16">
+            <Item
+              resourceName="Sala de Aula"
               colorBg="bg-[#F46F95]"
+              logo={Logo}
             />
-            <Resource
-              resourceName="208"
-              professor="Mangan"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
-            <Resource
-              resourceName="209"
-              professor="Wesley"
-              colorBg="bg-[#C00F0C]"
-              date="10/10"
-              time="10:19"
-            />
-            <Resource resourceName="210" professor="" colorBg="bg-[#F46F95]" />
+
+            <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
+              <Resource
+                resourceName="207"
+                professor="Mangan"
+                colorBg="bg-[#F46F95]"
+              />
+              <Resource
+                resourceName="208"
+                professor="Mangan"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+              <Resource
+                resourceName="209"
+                professor="Wesley"
+                colorBg="bg-[#C00F0C]"
+                date="10/10"
+                time="10:19"
+              />
+              <Resource
+                resourceName="210"
+                professor=""
+                colorBg="bg-[#F46F95]"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
-    
   );
 }
 
