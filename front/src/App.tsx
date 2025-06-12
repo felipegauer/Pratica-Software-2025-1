@@ -1,11 +1,12 @@
 import Item from "./components/Resources/Item";
 import Resource from "./components/Resources/Resource";
-import LogoSalas from "./assets/LogoSalas.png";
+
 import LogoNotebooks from "./assets/LogoNotebooks.png";
 import LogoKitsHDMI from "./assets/LogoKitsHDMI.png";
 import LogoKitsVGA from "./assets/LogoKitsVGA.png";
 import Logo from "./assets/Logo.png";
 import Navbar from "./components/navBar/Navbar";
+import GridResource from "./components/Resources/GridResource";
 
 function App() {
   return (
@@ -13,79 +14,9 @@ function App() {
       <div className="lg:container mx-auto p-4">
         <Navbar />
 
-        <div className="flex flex-col gap-8 items-center justify-start ">
+        <div className="flex flex-col gap-8 items-start justify-start ">
           {/* Salas */}
-          <div className="flex gap-16">
-            <Item
-              resourceName="Laboratório"
-              colorBg="bg-[#9AF3BC]"
-              logo={LogoSalas}
-            />
-
-            <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
-              <Resource
-                resourceName="207"
-                professor="Mangan"
-                colorBg="bg-[#9AF3BC]"
-              />
-              <Resource
-                resourceName="208"
-                professor="Mangan"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-              <Resource
-                resourceName="209"
-                professor="Wesley"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-              <Resource
-                resourceName="210"
-                professor=""
-                colorBg="bg-[#9AF3BC]"
-              />
-              <Resource
-                resourceName="209"
-                professor="Wesley"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-              <Resource
-                resourceName="210"
-                professor=""
-                colorBg="bg-[#9AF3BC]"
-              />
-              <Resource
-                resourceName="209"
-                professor="Wesley"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-              <Resource
-                resourceName="210"
-                professor=""
-                colorBg="bg-[#9AF3BC]"
-              />
-              <Resource
-                resourceName="209"
-                professor="Wesley"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-              <Resource
-                resourceName="210"
-                professor=""
-                colorBg="bg-[#9AF3BC]"
-              />
-            </div>
-          </div>
-
+          <GridResource />
           {/* Notebooks */}
           <div className="flex gap-16">
             <Item

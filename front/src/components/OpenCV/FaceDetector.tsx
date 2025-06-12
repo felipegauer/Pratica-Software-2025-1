@@ -86,19 +86,18 @@ export function FaceDetection() {
     pauseMediaStream();
   }, [pauseMediaStream]);
 
-  const handleManualCapture = useCallback(() => {
-    loopDestroyerRef.current = true;
+  // const handleManualCapture = useCallback(() => {
+  //   loopDestroyerRef.current = true;
 
-    const data = getScreenshot();
+  //   const data = getScreenshot();
 
-    if (!data || !outputCanvasRef.current) return;
+  //   if (!data || !outputCanvasRef.current) return;
 
-    captureSelfie(data, outputCanvasRef.current);
-    proceedToConfirmation();
-  }, [captureSelfie, getScreenshot, proceedToConfirmation]);
+  //   captureSelfie(data, outputCanvasRef.current);
+  //   proceedToConfirmation();
+  // }, [captureSelfie, getScreenshot, proceedToConfirmation]);
 
   const handleReset = useCallback(() => {
-    setProfessor(null);
     setFaceVector(undefined);
     loopDestroyerRef.current = false;
 
@@ -109,10 +108,10 @@ export function FaceDetection() {
     resumeMediaStream();
   }, [resumeMediaStream]);
 
-  const showManualCaptureBtn = useMemo(
-    () => readyToShoot && showManualCapture && !selfieCaptured,
-    [readyToShoot, selfieCaptured, showManualCapture]
-  );
+  // const showManualCaptureBtn = useMemo(
+  //   () => readyToShoot && showManualCapture && !selfieCaptured,
+  //   [readyToShoot, selfieCaptured, showManualCapture]
+  // );
 
   const showConfirmation = useMemo(
     () =>
@@ -127,7 +126,10 @@ export function FaceDetection() {
       const faces = detectFaces(data, ctx);
       const validationResult = validateFaces(faces);
       console.log("Face detection result:", validationResult);
-      setError(validationResult);
+      if (validationResult === FaceDetectionStatus.Success) setError(null);
+
+      if (validationResult != FaceDetectionStatus.FaceNotFound)
+        return FaceDetectionStatus.Success;
       return validationResult;
     },
     [detectFaces, validateFaces]
@@ -164,15 +166,15 @@ export function FaceDetection() {
 
   // run face detection loop
   useEffect(() => {
-    if (
-      !initialized ||
-      !readyToShoot ||
-      selfieCaptured ||
-      status === CaptureStatus.Ready ||
-      status === CaptureStatus.Done ||
-      status === CaptureStatus.Confirmation
-    )
-      return;
+    // if (
+    //   !initialized ||
+    //   !readyToShoot ||
+    //   selfieCaptured ||
+    //   status === CaptureStatus.Ready ||
+    //   status === CaptureStatus.Done ||
+    //   status === CaptureStatus.Confirmation
+    // )
+    //   return;
 
     let timeout: ReturnType<typeof setTimeout>;
     let result!: FaceDetectionStatus;
@@ -324,6 +326,8 @@ export function FaceDetection() {
 
   useEffect(() => {
     if (!faceVector) return;
+    console.log(faceVector);
+
     axios
       .post("/api/professor/find-match", {
         faceVector: Array.from(faceVector || []), // Convert Float32Array to regular array
@@ -331,8 +335,8 @@ export function FaceDetection() {
       .then((response) => {
         setProfessor(response.data);
       })
-      .catch((error) => {
-        console.error("Error finding face match:", error);
+      .catch(() => {
+        setProfessor(null);
         setError("Not Found");
         handleReset();
       });
@@ -341,7 +345,7 @@ export function FaceDetection() {
   return (
     <div className="flex flex-col items-center relative justify-center gap-2">
       {professor ? (
-        <div className="text-2xl absolute top-2 z-10 bg-green-500 rounded px-2 py-1 font-bold text-white">
+        <div className="text-lg absolute top-2 z-10 bg-green-500 rounded px-2 py-1 font-bold text-white">
           <h1>{professor.name}</h1>
         </div>
       ) : (
@@ -356,13 +360,13 @@ export function FaceDetection() {
         <OutputVideo videoRef={videoRef} debugOverlayRef={debugOverlayRef} />
         <OutputCanvas ref={outputCanvasRef} hidden={!showConfirmation} />
       </div>
-
+      {/* 
       {showManualCaptureBtn && (
         <button disabled={initializing} onClick={handleManualCapture}>
           Take selfie
         </button>
-      )}
-
+      )} */}
+      {/* 
       {showConfirmation && (
         <div>
           <button
@@ -372,7 +376,7 @@ export function FaceDetection() {
             Retake
           </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

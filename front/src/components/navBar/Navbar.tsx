@@ -1,8 +1,24 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Modal from "../modal/Modal";
+import { FaceDetection } from "../OpenCV/FaceDetector";
 
 function Navbar() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
+  const loopDestroyerRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (!open && !loopDestroyerRef.current) {
+      loopDestroyerRef.current = true; // Prevent further state changes
+      const timer = setTimeout(() => {
+        setOpen(true);
+      }, 15000); // Reopen the modal after 1 second
+
+      return () => clearTimeout(timer); // Cleanup the timer on unmount
+    } else if (open) {
+      loopDestroyerRef.current = false; // Reset the flag when modal is open
+    }
+  }, [open]);
+
   return (
     <div className="flex justify-center items-center gap-20 mb-8 mt-4 text-gray-500">
       <div className="flex flex-row gap-1 items-center">
@@ -23,11 +39,15 @@ function Navbar() {
         />
       </div>
       <button
-      onClick={() => setOpen(prev=> !prev)}
-       className="bg-[#007AFF] text-white px-4 py-2 rounded-sm cursor-pointer hover:bg-[#005BB5] transition-colors duration-150">
-        Face Scan
+        onClick={() => setOpen((prev) => !prev)}
+        className="bg-[#007AFF] text-white px-4 py-2 rounded-sm cursor-pointer hover:bg-[#005BB5] transition-colors duration-150"
+      >
+        Toggle FaceScan
       </button>
-      <Modal open={open} setOpen={setOpen} />
+
+      <div className="absolute top-2 right-2 w-70 h-70 ">
+        {open && <FaceDetection />}
+      </div>
     </div>
   );
 }
