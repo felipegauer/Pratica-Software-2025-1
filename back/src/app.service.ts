@@ -67,7 +67,7 @@ export class AppService {
         }, 0),
       );
 
-      console.log(`Distance for ${professor.nome}: ${distance}`);
+      // console.log(`Distance for ${professor.nome}: ${distance}`);
 
       if (distance < bestMatch.distance) {
         bestMatch = {
