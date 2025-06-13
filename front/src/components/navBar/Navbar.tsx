@@ -45,8 +45,14 @@ function Navbar() {
         Toggle FaceScan
       </button>
 
-      <div className="absolute top-2 right-2 w-70 h-70 ">
-        {open && <FaceDetection />}
+      <div className="absolute top-2 rounded-xl text-white flex justify-center items-center bg-black right-2 w-70 h-38 ">
+        {open ? (
+          <FaceDetection />
+        ) : (
+          <div className="bg-black w-70 flex items-center justify-center rounded-xl h-38 p-2">
+            Face Scan Closed
+          </div>
+        )}
       </div>
     </div>
   );
