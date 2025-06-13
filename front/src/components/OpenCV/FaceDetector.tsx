@@ -26,7 +26,7 @@ import axios from "axios";
 
 export function FaceDetection() {
   const [selfieCaptured, setSelfieCaptured] = useState<boolean>(false);
-  const [showManualCapture, setShowManualCapture] = useState<boolean>(false);
+  // const [showManualCapture, setShowManualCapture] = useState<boolean>(false);
   const [firstFaceDetection, setFirstFaceDetection] = useState<boolean>(false);
   const [status, setStatus] = useState(CaptureStatus.Idle);
   const [toDetect, setToDetect] = useState<ImageData>();
@@ -102,7 +102,7 @@ export function FaceDetection() {
     loopDestroyerRef.current = false;
 
     setSelfieCaptured(false);
-    setShowManualCapture(true);
+    // setShowManualCapture(true);
     setStatus(CaptureStatus.Idle);
 
     resumeMediaStream();
@@ -273,8 +273,9 @@ export function FaceDetection() {
 
     if (readyToShoot) {
       timeout = setTimeout(
-        () => setShowManualCapture(true),
-        MANUAL_CAPTURE_GLOBAL_TIMEOUT
+        () =>
+          // () => setShowManualCapture(true),
+          MANUAL_CAPTURE_GLOBAL_TIMEOUT
       );
     }
 
@@ -287,8 +288,9 @@ export function FaceDetection() {
 
     if (firstFaceDetection) {
       timeout = setTimeout(
-        () => setShowManualCapture(true),
-        MANUAL_CAPTURE_TIMEOUT
+        () =>
+          // () => setShowManualCapture(true),
+          MANUAL_CAPTURE_TIMEOUT
       );
     }
 
