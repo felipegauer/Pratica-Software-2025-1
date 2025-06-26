@@ -75,4 +75,23 @@ export class PrismaProfessorRepository implements IProfessorRepository {
       },
     });
   }
+
+  async findByIdWithResources(professorId: string): Promise<any> {
+    return this.prisma.professor.findUnique({
+      where: {
+        id: professorId,
+      },
+      include: {
+        reservas: {
+          include: {
+            recurso: {
+              include: {
+                sala: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
 }

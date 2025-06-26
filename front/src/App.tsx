@@ -7,10 +7,25 @@ import LogoKitsVGA from "./assets/LogoKitsVGA.png";
 import Logo from "./assets/Logo.png";
 import Navbar from "./components/navBar/Navbar";
 import GridResource from "./components/Resources/GridResource";
+import { useProfessor } from "./context/ProfessorContext";
+import { useEffect, useState } from "react";
 
 function App() {
+  const { professorId } = useProfessor();
+  const [currentProfessor, setCurrentProfessor] = useState<string>(professorId);
+
+  useEffect(() => {
+    if (professorId !== currentProfessor) {
+      setCurrentProfessor(professorId);
+    }
+  }, [professorId]);
+
+  useEffect(() => {
+    //TODO fetch resources based on the current professor
+  }, [currentProfessor]);
+
   return (
-    <div className="dark:bg-black">
+    <div className="">
       <div className="lg:container mx-auto p-4">
         <Navbar />
 

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { IProfessorRepository } from './repositories/IProfessorRepository';
 import { CreateProfessorDto } from './dtos/create/create-professor';
+import { Professor, ReservaRecurso } from '@prisma/client';
 
 @Injectable()
 export class AppService {
@@ -87,6 +88,23 @@ export class AppService {
       id: bestMatch.professor.id,
       name: bestMatch.professor.nome,
       distance: bestMatch.distance,
+    };
+  }
+
+  async findByIdWithResources(professorId: string) {
+    const professor =
+      await this.professorRepo.findByIdWithResources(professorId);
+    if (!professor) throw new Error('Professor not found');
+    return {
+      id: professor.id,
+      name: professor.nome,
+      resources: professor.reservas.map((r) =>
+        r.recurso.map((res) => ({
+          descricao: res.descricao,
+          reservado: res.reservado,
+          sala: res.sala.numeroSala,
+        })),
+      ),
     };
   }
 

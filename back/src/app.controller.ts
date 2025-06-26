@@ -49,11 +49,20 @@ export class AppController {
   }
 
   @Post('find-match')
-  async findMatchingFaceVector(
-    @Body() faceVector: { faceVector: number[] },
-  ) {
+  async findMatchingFaceVector(@Body() faceVector: { faceVector: number[] }) {
     try {
-      return await this.appService.findMatchingFaceVector(faceVector.faceVector);
+      return await this.appService.findMatchingFaceVector(
+        faceVector.faceVector,
+      );
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  @Get('resources')
+  async findByIdWithResources(@Query('id') professorId: string) {
+    try {
+      return await this.appService.findByIdWithResources(professorId);
     } catch (error) {
       throw new NotFoundException(error.message);
     }
