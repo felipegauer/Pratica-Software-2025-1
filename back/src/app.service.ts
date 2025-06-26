@@ -97,8 +97,9 @@ export class AppService {
     if (!professor) throw new Error('Professor not found');
     return {
       id: professor.id,
-      name: professor.nome,
-      resources: professor.reservas.map((r) =>
+      nome: professor.nome,
+      matricula: professor.matricula,
+      reservas: professor.reservas.map((r) =>
         r.recurso.map((res) => ({
           descricao: res.descricao,
           reservado: res.reservado,
