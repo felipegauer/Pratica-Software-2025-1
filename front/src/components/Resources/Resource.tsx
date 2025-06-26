@@ -9,7 +9,7 @@ interface ResourceProps {
 function Resource(resource: ResourceProps) {
   return (
     <div
-      className={`hover:scale-105 cursor-pointer  h-26 w-36 transition-all delay-150 ease-in-out flex flex-col items-center justify-center rounded-lg shadow-md text-black ${
+      className={`hover:scale-105 cursor-pointer  h-30 w-44 transition-all delay-150 ease-in-out flex flex-col items-center justify-center rounded-lg shadow-md text-black ${
         resource.colorBg ? resource.colorBg : "bg-gray-100 "
       }`}
     >

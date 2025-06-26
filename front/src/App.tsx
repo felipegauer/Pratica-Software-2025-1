@@ -48,7 +48,7 @@ function App() {
         setCurrentProfessor("");
         setResources(null);
         setProfessorId("");
-      }, 15000); // 15 segundos
+      }, 3000); // 15 segundos
     }
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
