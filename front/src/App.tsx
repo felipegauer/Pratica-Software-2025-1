@@ -8,11 +8,13 @@ import Logo from "./assets/Logo.png";
 import Navbar from "./components/navBar/Navbar";
 import GridResource from "./components/Resources/GridResource";
 import { useProfessor } from "./context/ProfessorContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 function App() {
   const { professorId } = useProfessor();
   const [currentProfessor, setCurrentProfessor] = useState<string>(professorId);
+  const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (professorId !== currentProfessor) {
@@ -21,8 +23,35 @@ function App() {
   }, [professorId]);
 
   useEffect(() => {
-    //TODO fetch resources based on the current professor
+    if (!currentProfessor || currentProfessor === "") return;
+
+    axios
+      .get(`/api/professor/recursos?id=${currentProfessor}`)
+      .then((response) => {
+        if (response.data) {
+          console.log("Recursos do professor:", response.data);
+        } else {
+          console.error("Nenhum recurso encontrado para o professor.");
+        }
+      })
+      .catch((error) => {
+        console.log("Erro ao buscar recursos do professor:", error);
+      });
   }, [currentProfessor]);
+
+  useEffect(() => {
+    if (professorId === "") return;
+    if (professorId === currentProfessor) {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+      timeoutRef.current = setTimeout(() => {
+        setCurrentProfessor("");
+      }, 15000);
+    }
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [professorId, currentProfessor]);
 
   return (
     <div className="">

@@ -11,7 +11,7 @@ function Navbar() {
       loopDestroyerRef.current = true; // Prevent further state changes
       const timer = setTimeout(() => {
         setOpen(true);
-      }, 15000); // Reopen the modal after 1 second
+      }, 15000); // Reopen the modal after 15 second
 
       return () => clearTimeout(timer); // Cleanup the timer on unmount
     } else if (open) {

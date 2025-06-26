@@ -59,7 +59,7 @@ export class AppController {
     }
   }
 
-  @Get('resources')
+  @Get('recursos')
   async findByIdWithResources(@Query('id') professorId: string) {
     try {
       return await this.appService.findByIdWithResources(professorId);

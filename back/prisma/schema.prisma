@@ -52,7 +52,7 @@ model Turma {
 }
 
 model Recurso {
-  id        String           @id @default(uuid())
+  id        String           @id
   descricao String
   reservado Boolean          @default(false) // Indica se está reservado ou não
   sala      Sala?
@@ -60,11 +60,11 @@ model Recurso {
 }
 
 model Sala {
-  id         String  @id
+  id         String  @id @default(uuid())
   numeroSala String
   estado     Boolean @default(false)
 
-  recurso Recurso @relation(fields: [id], references: [id])
+  recurso Recurso? @relation(fields: [id], references: [id])
 }
 
 model ReservaRecurso {

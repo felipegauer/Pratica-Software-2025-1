@@ -21,6 +21,7 @@ import { useCamera } from "../../hooks/useCamera";
 import { useFaceDetection } from "../../hooks/useFaceDetection";
 import { OutputCanvas, OutputVideo } from "../Output";
 import axios from "axios";
+import { useProfessor } from "../../context/ProfessorContext";
 
 // import "./styles.css";
 
@@ -35,6 +36,7 @@ export function FaceDetection() {
 
   type Professor = { nome: string; [key: string]: any };
   const [professor, setProfessor] = useState<Professor | null>(null);
+  const { setProfessorId } = useProfessor();
 
   const videoRef = useRef<HTMLVideoElement>(
     null
@@ -125,7 +127,6 @@ export function FaceDetection() {
 
       const faces = detectFaces(data, ctx);
       const validationResult = validateFaces(faces);
-      console.log("Face detection result:", validationResult);
       if (validationResult === FaceDetectionStatus.Success) setError(null);
 
       if (validationResult != FaceDetectionStatus.FaceNotFound)
@@ -328,7 +329,6 @@ export function FaceDetection() {
 
   useEffect(() => {
     if (!faceVector) return;
-    console.log(faceVector);
 
     axios
       .post("/api/professor/find-match", {
@@ -336,10 +336,10 @@ export function FaceDetection() {
       })
       .then((response) => {
         setProfessor(response.data);
+        setProfessorId(response.data.id);
       })
       .catch(() => {
         setProfessor(null);
-        setError("Not Found");
         handleReset();
       });
   }, [faceVector]);

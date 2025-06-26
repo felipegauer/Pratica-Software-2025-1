@@ -99,13 +99,14 @@ export class AppService {
       id: professor.id,
       nome: professor.nome,
       matricula: professor.matricula,
-      reservas: professor.reservas.map((r) =>
-        r.recurso.map((res) => ({
-          descricao: res.descricao,
-          reservado: res.reservado,
-          sala: res.sala.numeroSala,
-        })),
-      ),
+      reservas: professor.reservas.map((r) => ({
+        periodo: r.periodo,
+        data: r.data,
+        recursoId: r.recurso.id,
+        recursoType: r.recurso.descricao,
+        reservado: r.recurso.reservado,
+        sala: r.recurso.sala,
+      })),
     };
   }
 
