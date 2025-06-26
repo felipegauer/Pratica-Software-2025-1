@@ -108,6 +108,7 @@ export class AppService {
         recursoType: r.recurso.descricao,
         reservado: r.recurso.reservado,
         sala: r.recurso.sala,
+        professor: professor.nome,
       })),
     };
   }

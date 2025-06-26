@@ -6,6 +6,6 @@ export default interface ResourceInterface {
     recursoType: string;
     reservado: boolean;
     sala: any;
+    professor?: string;
   }[];
-  professor?: string;
 }

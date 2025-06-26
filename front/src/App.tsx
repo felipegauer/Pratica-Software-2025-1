@@ -29,7 +29,6 @@ function App() {
         if (response.data) {
           setResources({
             reservas: response.data.reservas,
-            professor: response.data.nome,
           });
         } else {
           console.error("Nenhum recurso encontrado para o professor.");
@@ -89,7 +88,7 @@ function App() {
               ?.filter((res) => res.recursoType === "LABORATORIO")
               .map((res) => ({
                 resourceName: res.recursoId.toString(),
-                professor: resources.professor,
+                professor: res.professor,
                 reservado: res.reservado,
               }))}
           />
@@ -99,7 +98,7 @@ function App() {
               ?.filter((res) => res.recursoType === "NOTEBOOK")
               .map((res) => ({
                 resourceName: res.recursoId.toString(),
-                professor: resources.professor,
+                professor: res.professor,
                 reservado: res.reservado,
               }))}
           />
@@ -109,7 +108,7 @@ function App() {
               ?.filter((res) => res.recursoType === "HDMI")
               .map((res) => ({
                 resourceName: res.recursoId.toString(),
-                professor: resources.professor,
+                professor: res.professor,
                 reservado: res.reservado,
               }))}
           />
@@ -119,7 +118,7 @@ function App() {
               ?.filter((res) => res.recursoType === "VGA")
               .map((res) => ({
                 resourceName: res.recursoId.toString(),
-                professor: resources.professor,
+                professor: res.professor,
                 reservado: res.reservado,
               }))}
           />
