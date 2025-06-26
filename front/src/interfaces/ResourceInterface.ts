@@ -7,5 +7,5 @@ export default interface ResourceInterface {
     reservado: boolean;
     sala: any;
   }[];
-  professor: string;
+  professor?: string;
 }
