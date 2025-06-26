@@ -9,7 +9,7 @@ import ResourceInterface from "./interfaces/ResourceInterface";
 import LabResources from "./components/Resources/Types/LabResource";
 
 function App() {
-  const { professorId, setProfessorId } = useProfessor();
+  const { professorId, setProfessorId, trigger } = useProfessor();
   const [currentProfessor, setCurrentProfessor] = useState<string>(professorId);
   const [resources, setResources] = useState<ResourceInterface | null>(null);
   const timeoutRef = useRef<number | null>(null);
@@ -48,16 +48,14 @@ function App() {
         setCurrentProfessor("");
         setResources(null);
         setProfessorId("");
-      }, 15000);
+      }, 15000); // 15 segundos
     }
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [professorId, currentProfessor]);
+  }, [trigger, currentProfessor]);
 
   useEffect(() => {
-    console.log("Aqui recursos", resources);
-
     if (resources) return;
     if (currentProfessor != "") return;
     axios
@@ -74,7 +72,7 @@ function App() {
       .catch((error) => {
         console.error("Erro ao buscar todos os recursos:", error);
       });
-  }, [resources]);
+  }, [resources, professorId]);
 
   return (
     <div className="">

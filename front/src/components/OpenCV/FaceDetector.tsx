@@ -36,7 +36,7 @@ export function FaceDetection() {
 
   type Professor = { nome: string; [key: string]: any };
   const [professor, setProfessor] = useState<Professor | null>(null);
-  const { professorId, setProfessorId } = useProfessor();
+  const { professorId, setProfessorId, setTrigger } = useProfessor();
 
   const videoRef = useRef<HTMLVideoElement>(
     null
@@ -337,6 +337,10 @@ export function FaceDetection() {
       .then((response) => {
         setProfessor(response.data);
         setProfessorId(response.data.id);
+        setTrigger((prev) => {
+          if (prev > 15000) return 0;
+          return prev + 1;
+        });
       })
       .catch(() => {
         setProfessor(null);

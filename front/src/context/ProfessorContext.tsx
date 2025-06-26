@@ -4,6 +4,8 @@ export const ProfessorContext = createContext<
   | {
       professorId: string;
       setProfessorId: React.Dispatch<React.SetStateAction<string>>;
+      trigger: number;
+      setTrigger: React.Dispatch<React.SetStateAction<number>>;
     }
   | undefined
 >(undefined);
@@ -14,8 +16,11 @@ export const ProfessorProvider = ({
   children: React.ReactNode;
 }) => {
   const [professorId, setProfessorId] = useState<string>("");
+  const [trigger, setTrigger] = useState<number>(0);
   return (
-    <ProfessorContext.Provider value={{ professorId, setProfessorId }}>
+    <ProfessorContext.Provider
+      value={{ professorId, setProfessorId, trigger, setTrigger }}
+    >
       {children}
     </ProfessorContext.Provider>
   );
@@ -26,6 +31,6 @@ export function useProfessor() {
   if (!context) {
     throw new Error("useProfessor must be used within a ProfessorProvider");
   }
-  const { professorId, setProfessorId } = context;
-  return { professorId, setProfessorId };
+  const { professorId, setProfessorId, trigger, setTrigger } = context;
+  return { professorId, setProfessorId, trigger, setTrigger };
 }
