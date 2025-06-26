@@ -1,19 +1,17 @@
-import Item from "./components/Resources/Item";
-import Resource from "./components/Resources/Resource";
-
-import LogoNotebooks from "./assets/LogoNotebooks.png";
-import LogoKitsHDMI from "./assets/LogoKitsHDMI.png";
-import LogoKitsVGA from "./assets/LogoKitsVGA.png";
-import Logo from "./assets/Logo.png";
 import Navbar from "./components/navBar/Navbar";
-import GridResource from "./components/Resources/GridResource";
 import { useProfessor } from "./context/ProfessorContext";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import NotebookResources from "./components/Resources/Types/NotebookResources";
+import HDMIResources from "./components/Resources/Types/HDMIResource";
+import VGAResources from "./components/Resources/Types/VGAResources";
+import ResourceInterface from "./interfaces/ResourceInterface";
+import LabResources from "./components/Resources/Types/LabResource";
 
 function App() {
   const { professorId } = useProfessor();
   const [currentProfessor, setCurrentProfessor] = useState<string>(professorId);
+  const [resources, setResources] = useState<ResourceInterface>();
   const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -29,7 +27,10 @@ function App() {
       .get(`/api/professor/recursos?id=${currentProfessor}`)
       .then((response) => {
         if (response.data) {
-          console.log("Recursos do professor:", response.data);
+          setResources({
+            reservas: response.data.reservas,
+            professor: response.data.nome,
+          });
         } else {
           console.error("Nenhum recurso encontrado para o professor.");
         }
@@ -53,6 +54,10 @@ function App() {
     };
   }, [professorId, currentProfessor]);
 
+  useEffect(() => {
+    console.log(resources);
+  }, [resources]);
+
   return (
     <div className="">
       <div className="lg:container mx-auto p-4">
@@ -60,162 +65,45 @@ function App() {
 
         <div className="flex flex-col gap-8 items-start justify-start ">
           {/* Salas */}
-          <GridResource />
+          <LabResources
+            resources={resources?.reservas
+              .filter((res) => res.recursoType === "LABORATORIO")
+              .map((res) => ({
+                resourceName: res.recursoId.toString(),
+                professor: resources.professor,
+                reservado: res.reservado,
+              }))}
+          />
           {/* Notebooks */}
-          <div className="flex gap-16">
-            <Item
-              resourceName="Notebooks"
-              colorBg="bg-[#59A5F8]"
-              logo={LogoNotebooks}
-            />
-
-            <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
-              <Resource
-                resourceName="207"
-                professor="Mangan"
-                colorBg="bg-[#59A5F8]"
-              />
-              <Resource
-                resourceName="208"
-                professor="Mangan"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-              <Resource
-                resourceName="209"
-                professor="Wesley"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-              <Resource
-                resourceName="210"
-                professor=""
-                colorBg="bg-[#59A5F8]"
-              />
-              <Resource
-                resourceName="211"
-                professor="Mangan"
-                colorBg="bg-[#59A5F8]"
-              />
-              <Resource
-                resourceName="212"
-                professor="Mangan"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-            </div>
-          </div>
-
+          <NotebookResources
+            resources={resources?.reservas
+              .filter((res) => res.recursoType === "NOTEBOOK")
+              .map((res) => ({
+                resourceName: res.recursoId.toString(),
+                professor: resources.professor,
+                reservado: res.reservado,
+              }))}
+          />
           {/* Kits HDMI */}
-          <div className="flex gap-16">
-            <Item
-              resourceName="Kits HDMI"
-              colorBg="bg-[#E9F26E]"
-              logo={LogoKitsHDMI}
-            />
-
-            <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
-              <Resource
-                resourceName="207"
-                professor="Mangan"
-                colorBg="bg-[#E9F26E]"
-              />
-              <Resource
-                resourceName="208"
-                professor="Mangan"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-              <Resource
-                resourceName="209"
-                professor="Wesley"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-              <Resource
-                resourceName="210"
-                professor=""
-                colorBg="bg-[#E9F26E]"
-              />
-            </div>
-          </div>
-
+          <HDMIResources
+            resources={resources?.reservas
+              .filter((res) => res.recursoType === "HDMI")
+              .map((res) => ({
+                resourceName: res.recursoId.toString(),
+                professor: resources.professor,
+                reservado: res.reservado,
+              }))}
+          />
           {/* Kits VGA */}
-          <div className="flex gap-16">
-            <Item
-              resourceName="Kits VGA"
-              colorBg="bg-[#F4C16F]"
-              logo={LogoKitsVGA}
-            />
-
-            <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
-              <Resource
-                resourceName="207"
-                professor="Mangan"
-                colorBg="bg-[#F4C16F]"
-              />
-              <Resource
-                resourceName="208"
-                professor="Mangan"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-              <Resource
-                resourceName="209"
-                professor="Wesley"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-              <Resource
-                resourceName="210"
-                professor=""
-                colorBg="bg-[#F4C16F]"
-              />
-            </div>
-          </div>
-
-          {/* Kits VGA */}
-          <div className="flex gap-16">
-            <Item
-              resourceName="Sala de Aula"
-              colorBg="bg-[#F46F95]"
-              logo={Logo}
-            />
-
-            <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
-              <Resource
-                resourceName="207"
-                professor="Mangan"
-                colorBg="bg-[#F46F95]"
-              />
-              <Resource
-                resourceName="208"
-                professor="Mangan"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-              <Resource
-                resourceName="209"
-                professor="Wesley"
-                colorBg="bg-[#C00F0C]"
-                date="10/10"
-                time="10:19"
-              />
-              <Resource
-                resourceName="210"
-                professor=""
-                colorBg="bg-[#F46F95]"
-              />
-            </div>
-          </div>
+          <VGAResources
+            resources={resources?.reservas
+              .filter((res) => res.recursoType === "VGA")
+              .map((res) => ({
+                resourceName: res.recursoId.toString(),
+                professor: resources.professor,
+                reservado: res.reservado,
+              }))}
+          />
         </div>
       </div>
     </div>
