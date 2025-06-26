@@ -67,4 +67,13 @@ export class AppController {
       throw new NotFoundException(error.message);
     }
   }
+
+  @Get('todos-recursos')
+  async findAllResources() {
+    try {
+      return await this.appService.findAllResources();
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
 }

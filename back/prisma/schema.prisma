@@ -53,7 +53,7 @@ model Turma {
 
 model Recurso {
   id        String           @id
-  descricao String
+  descricao TipoRecurso
   reservado Boolean          @default(false) // Indica se está reservado ou não
   sala      Sala?
   reservas  ReservaRecurso[]
@@ -100,4 +100,11 @@ enum PeriodoLetivo {
   JK // 17:30–19:00
   LM // 19:15–20:45
   NP // 21:00–22:30
+}
+
+enum TipoRecurso {
+  LABORATORIO
+  NOTEBOOK
+  VGA
+  HDMI
 }

@@ -9,9 +9,9 @@ import ResourceInterface from "./interfaces/ResourceInterface";
 import LabResources from "./components/Resources/Types/LabResource";
 
 function App() {
-  const { professorId } = useProfessor();
+  const { professorId, setProfessorId } = useProfessor();
   const [currentProfessor, setCurrentProfessor] = useState<string>(professorId);
-  const [resources, setResources] = useState<ResourceInterface>();
+  const [resources, setResources] = useState<ResourceInterface | null>(null);
   const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -47,6 +47,8 @@ function App() {
 
       timeoutRef.current = setTimeout(() => {
         setCurrentProfessor("");
+        setResources(null);
+        setProfessorId("");
       }, 15000);
     }
     return () => {
@@ -55,7 +57,24 @@ function App() {
   }, [professorId, currentProfessor]);
 
   useEffect(() => {
-    console.log(resources);
+    console.log("Aqui recursos", resources);
+
+    if (resources) return;
+    if (currentProfessor != "") return;
+    axios
+      .get("/api/professor/todos-recursos")
+      .then((response) => {
+        if (response.data) {
+          setResources({
+            reservas: response.data,
+          });
+        } else {
+          console.error("Nenhum recurso encontrado.");
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar todos os recursos:", error);
+      });
   }, [resources]);
 
   return (
@@ -67,7 +86,7 @@ function App() {
           {/* Salas */}
           <LabResources
             resources={resources?.reservas
-              .filter((res) => res.recursoType === "LABORATORIO")
+              ?.filter((res) => res.recursoType === "LABORATORIO")
               .map((res) => ({
                 resourceName: res.recursoId.toString(),
                 professor: resources.professor,
@@ -77,7 +96,7 @@ function App() {
           {/* Notebooks */}
           <NotebookResources
             resources={resources?.reservas
-              .filter((res) => res.recursoType === "NOTEBOOK")
+              ?.filter((res) => res.recursoType === "NOTEBOOK")
               .map((res) => ({
                 resourceName: res.recursoId.toString(),
                 professor: resources.professor,
@@ -87,7 +106,7 @@ function App() {
           {/* Kits HDMI */}
           <HDMIResources
             resources={resources?.reservas
-              .filter((res) => res.recursoType === "HDMI")
+              ?.filter((res) => res.recursoType === "HDMI")
               .map((res) => ({
                 resourceName: res.recursoId.toString(),
                 professor: resources.professor,
@@ -97,7 +116,7 @@ function App() {
           {/* Kits VGA */}
           <VGAResources
             resources={resources?.reservas
-              .filter((res) => res.recursoType === "VGA")
+              ?.filter((res) => res.recursoType === "VGA")
               .map((res) => ({
                 resourceName: res.recursoId.toString(),
                 professor: resources.professor,

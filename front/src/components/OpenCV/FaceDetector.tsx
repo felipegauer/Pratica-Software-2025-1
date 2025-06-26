@@ -36,7 +36,7 @@ export function FaceDetection() {
 
   type Professor = { nome: string; [key: string]: any };
   const [professor, setProfessor] = useState<Professor | null>(null);
-  const { setProfessorId } = useProfessor();
+  const { professorId, setProfessorId } = useProfessor();
 
   const videoRef = useRef<HTMLVideoElement>(
     null
@@ -346,7 +346,7 @@ export function FaceDetection() {
 
   return (
     <div className="flex flex-col items-center relative justify-center gap-2">
-      {professor ? (
+      {professor && professorId ? (
         <div className="text-lg absolute top-2 z-10 bg-green-500 rounded px-2 py-1 font-bold text-white">
           <h1>{professor.name}</h1>
         </div>

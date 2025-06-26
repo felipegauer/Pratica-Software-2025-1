@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { randomUUID } from 'node:crypto';
 import { IProfessorRepository } from './repositories/IProfessorRepository';
 import { CreateProfessorDto } from './dtos/create/create-professor';
-import { Professor, ReservaRecurso } from '@prisma/client';
+import { IResourceRepository } from './repositories/IResourceRepository';
 
 @Injectable()
 export class AppService {
-  constructor(private professorRepo: IProfessorRepository) {}
+  constructor(
+    private professorRepo: IProfessorRepository,
+    private resourceRepo: IResourceRepository,
+  ) {}
 
   async create(professor: CreateProfessorDto) {
     const newUser = await this.professorRepo.create(professor);
@@ -110,6 +112,18 @@ export class AppService {
     };
   }
 
+  async findAllResources() {
+    const resources = await this.resourceRepo.findAll();
+    if (!resources || resources.length === 0) return null;
+    return resources.map((resource) => ({
+      periodo: resource.periodo,
+      data: resource.data,
+      recursoId: resource.recursoId,
+      recursoType: resource.recurso.descricao,
+      reservado: resource.recurso.reservado,
+      sala: resource.recurso.sala,
+    }));
+  }
   // async findMatchingFaceVector(faceVector: number[]) {
   //   const professors = await this.professorRepo.findAllWithFaceVector();
   //   if (!professors || professors.length === 0)
