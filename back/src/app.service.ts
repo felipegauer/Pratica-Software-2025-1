@@ -116,12 +116,13 @@ export class AppService {
     const resources = await this.resourceRepo.findAll();
     if (!resources || resources.length === 0) return null;
     return resources.map((resource) => ({
-      periodo: resource.periodo,
-      data: resource.data,
-      recursoId: resource.recursoId,
-      recursoType: resource.recurso.descricao,
-      reservado: resource.recurso.reservado,
-      sala: resource.recurso.sala,
+      periodo: resource.reservas[0]?.periodo || null,
+      data: resource.reservas[0]?.data || null,
+      recursoId: resource.id,
+      recursoType: resource.descricao,
+      reservado: resource.reservado,
+      sala: resource.sala,
+      professor: resource.reservas[0]?.professor?.nome || null,
     }));
   }
   // async findMatchingFaceVector(faceVector: number[]) {

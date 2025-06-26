@@ -7,16 +7,16 @@ export class PrismaResourceRepository implements IResourceRepository {
   constructor(private prisma: PrismaService) {}
 
   async findAll(): Promise<any> {
-    return await this.prisma.reservaRecurso.findMany({
+    return await this.prisma.recurso.findMany({
       include: {
-        recurso: {
+        sala: true,
+        reservas: {
           include: {
-            sala: true,
-          },
-        },
-        professor: {
-          select: {
-            nome: true,
+            professor: {
+              select: {
+                nome: true,
+              },
+            },
           },
         },
       },
