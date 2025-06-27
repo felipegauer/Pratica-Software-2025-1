@@ -20,7 +20,7 @@ function Navbar() {
   }, [open]);
 
   return (
-    <div className="flex justify-center items-center gap-20 mb-8 mt-4 text-gray-500">
+    <div className="flex justify-center items-center gap-16 mb-8 mt-4 text-gray-500">
       <div className="flex flex-row gap-1 items-center">
         <label className="text-lg font-semibold">Aula:</label>
         <input

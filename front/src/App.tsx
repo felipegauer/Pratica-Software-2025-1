@@ -79,7 +79,7 @@ function App() {
       <div className="lg:container mx-auto p-4">
         <Navbar />
 
-        <div className="flex flex-col gap-8 items-start justify-start ">
+        <div className="flex flex-col gap-8 items-start justify-center ">
           {/* Salas */}
           <LabResources
             resources={resources?.reservas

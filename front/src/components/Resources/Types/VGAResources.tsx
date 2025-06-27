@@ -23,7 +23,7 @@ export default function VGAResources({ resources }: ResourcesProps) {
           logo={LogoKitsVGA}
         />
 
-        <div className="grid gap-5 grid-cols-4 xl:grid-cols-6 self-center">
+        <div className="grid gap-20 grid-cols-4 xl:grid-cols-6 self-center">
           {resources.map((resource) => (
             <Resource
               key={resource.resourceName}
